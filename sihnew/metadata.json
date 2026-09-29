@@ -1,0 +1,6 @@
+{
+  "name": "AegisNet ANPR & Traffic AI Engine",
+  "description": "City-Wide AI Engine for Multi-Camera ANPR Trajectory Tracking, Vehicle Intelligence, and Urban Traffic Analytics",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

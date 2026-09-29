@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AegisNet — National Transit & ANPR Trajectory Portal</title>
+    <meta name="description" content="Unified National Transit and Multi-Camera ANPR Vehicle Trajectory Tracking, Owner Intelligence, and Urban Traffic Analytics Portal">
+    <meta property="og:title" content="AegisNet — National Transit & ANPR Trajectory Portal">
+    <meta property="og:description" content="Unified National Transit and Multi-Camera ANPR Vehicle Trajectory Tracking, Owner Intelligence, and Urban Traffic Analytics Portal">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- Professional Fonts: Inter + JetBrains Mono + Noto Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Leaflet CSS & JS for professional map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app" class="app-wrapper">
+        <!-- HEADER -->
+        <header class="main-header" id="main-header">
+            <!-- Top Utility Bar -->
+            <div class="utility-bar">
+                <div class="container utility-bar-inner">
+                    <div class="utility-left">
+                        <span class="utility-date" id="utility-date">Tuesday, 29 September 2026</span>
+                        <span class="utility-sep">|</span>
+                        <span class="utility-time">
+                            <i data-lucide="clock" class="icon-xs icon-amber"></i>
+                            <span id="utility-time">18:30:00</span> IST
+                        </span>
+                        <span class="utility-sep hide-mobile">|</span>
+                        <span class="utility-helpline hide-mobile">
+                            <i data-lucide="phone" class="icon-xs icon-emerald"></i>
+                            Helpline: <strong>1800-180-2026 (Toll Free 24x7)</strong>
+                        </span>
+                    </div>
+                    <div class="utility-right">
+                        <a href="#main-content" class="skip-link hide-tablet">Skip to Main Content</a>
+                        <span class="utility-sep hide-tablet">|</span>
+                        <div class="font-sizer">
+                            <button class="font-btn" onclick="setFontSize(-1)" title="Decrease Font">A-</button>
+                            <button class="font-btn active" onclick="setFontSize(0)" title="Default Font">A</button>
+                            <button class="font-btn" onclick="setFontSize(1)" title="Increase Font">A+</button>
+                        </div>
+                        <span class="utility-sep">|</span>
+                        <div class="lang-switch">
+                            <i data-lucide="globe" class="icon-xs icon-cyan"></i>
+                            <button class="lang-btn active" onclick="setLanguage('EN')">English</button>
+                            <span class="utility-sep-sm">/</span>
+                            <button class="lang-btn hindi-font" onclick="setLanguage('HI')">हिन्दी</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tricolor Bar -->
+            <div class="tricolor-bar"></div>
+
+            <!-- Portal Header Branding -->
+            <div class="portal-header">
+                <div class="container portal-header-inner">
+                    <div class="portal-brand">
+                        <!-- Custom Emblem -->
+                        <div class="emblem">
+                            <div class="emblem-inner">
+                                <div class="emblem-ring">
+                                    <div class="emblem-dashed-ring"></div>
+                                    <div class="emblem-center"></div>
+                                    <div class="emblem-cross-v"></div>
+                                    <div class="emblem-cross-h"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portal-titles">
+                            <div class="hindi-title hindi-font">राष्ट्रीय स्वचालित वाहन गति एवं मार्ग निगरानी पोर्टल</div>
+                            <h1 class="portal-main-title">National Transit & ANPR Trajectory Portal</h1>
+                            <p class="portal-subtitle">Unified Autonomous Urban Traffic Intelligence & Multi-Camera Enforcement System</p>
+                        </div>
+                    </div>
+                    <div class="portal-badges">
+                        <div class="sector-badge hide-mobile">
+                            <span class="sector-label">ACTIVE SECTOR COMMAND</span>
+                            <span class="sector-value">
+                                <span class="pulse-dot bg-emerald"></span>
+                                <span id="active-city">Metropolis Central</span>
+                            </span>
+                        </div>
+                        <div class="cert-badge">
+                            <span class="cert-label">AI ENGINE VERIFIED</span>
+                            <span class="cert-value">
+                                <i data-lucide="check-circle-2" class="icon-xs icon-emerald"></i>
+                                ISO 39001 COMPLIANT
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Bar -->
+            <nav class="nav-bar" id="nav-bar">
+                <div class="container">
+                    <div class="nav-items">
+                        <button class="nav-btn active" data-tab="journey" onclick="switchTab('journey')">
+                            <i data-lucide="map" class="icon-sm"></i>
+                            <div>
+                                <div class="nav-label">Journey Map</div>
+                                <div class="nav-hindi hindi-font">वाहन यात्रा मानचित्र</div>
+                            </div>
+                            <div class="nav-active-bar"></div>
+                        </button>
+                        <button class="nav-btn" data-tab="identifier" onclick="switchTab('identifier')">
+                            <i data-lucide="search" class="icon-sm"></i>
+                            <div>
+                                <div class="nav-label">Vehicle Identifier</div>
+                                <div class="nav-hindi hindi-font">वाहन एवं स्वामी विवरण</div>
+                            </div>
+                            <div class="nav-active-bar"></div>
+                        </button>
+                        <button class="nav-btn" data-tab="reviewer" onclick="switchTab('reviewer')">
+                            <i data-lucide="bar-chart-3" class="icon-sm"></i>
+                            <div>
+                                <div class="nav-label">Traffic Reviewer</div>
+                                <div class="nav-hindi hindi-font">यातायात घनत्व समीक्षक</div>
+                            </div>
+                            <div class="nav-active-bar"></div>
+                        </button>
+                        <button class="nav-btn" data-tab="live" onclick="switchTab('live')">
+                            <i data-lucide="video" class="icon-sm"></i>
+                            <div>
+                                <div class="nav-label">Live Surveillance</div>
+                                <div class="nav-hindi hindi-font">प्रत्यक्ष कैमरा निगरानी</div>
+                            </div>
+                            <div class="nav-active-bar"></div>
+                        </button>
+                        <button class="nav-btn" data-tab="analyzer" onclick="switchTab('analyzer')">
+                            <i data-lucide="film" class="icon-sm"></i>
+                            <div>
+                                <div class="nav-label">Video Analyzer</div>
+                                <div class="nav-hindi hindi-font">वीडियो विश्लेषक</div>
+                            </div>
+                            <div class="nav-active-bar"></div>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Marquee -->
+            <div class="marquee-bar">
+                <div class="marquee-badge">
+                    <span class="ping-dot"></span>
+                    <span>सूचना / NOTICE:</span>
+                </div>
+                <div class="marquee-track">
+                    <div class="marquee-text">
+                        ★ Real-time 24x7 Multi-Camera High-Speed Radar Intercept is active on all Expressways & Ring Flyovers. Speed limits are strictly monitored via Automated Optical ANPR Checkpoints. Over-speeding & blacklisted vehicle warrants are logged with microsecond timestamps. ★ New Video Analyzer module now available for offline ANPR & speed analysis.
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main id="main-content" class="main-content">
+            <div class="container">
+                <!-- Page: Journey Map -->
+                <div id="page-journey" class="page active"></div>
+                <!-- Page: Vehicle Identifier -->
+                <div id="page-identifier" class="page"></div>
+                <!-- Page: Traffic Reviewer -->
+                <div id="page-reviewer" class="page"></div>
+                <!-- Page: Live Surveillance -->
+                <div id="page-live" class="page"></div>
+                <!-- Page: Video Analyzer (NEW) -->
+                <div id="page-analyzer" class="page"></div>
+            </div>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="main-footer">
+            <div class="tricolor-bar"></div>
+            <div class="footer-primary">
+                <div class="container footer-grid">
+                    <div class="footer-col">
+                        <div class="footer-brand">
+                            <div class="footer-emblem">★</div>
+                            <div>
+                                <h4 class="footer-brand-title">National Transit Portal</h4>
+                                <span class="footer-brand-hindi hindi-font">राष्ट्रीय पारगमन पोर्टल</span>
+                            </div>
+                        </div>
+                        <p class="footer-desc">Centralized automated multi-camera surveillance trajectory mapping, citizen vehicle registration intelligence, and urban traffic density analytics platform.</p>
+                        <div class="footer-version mono">System Version: v4.2.8 • Server Build: 2026.09</div>
+                    </div>
+                    <div class="footer-col">
+                        <h4 class="footer-heading">Portal Services // पोर्टल सेवाएं</h4>
+                        <ul class="footer-links">
+                            <li><button onclick="switchTab('journey')">• Vehicle Journey Map & Speed Profiler</button></li>
+                            <li><button onclick="switchTab('identifier')">• Vehicle Identifier & Owner Particulars</button></li>
+                            <li><button onclick="switchTab('reviewer')">• City Traffic Density Reviewer & AI Options</button></li>
+                            <li><button onclick="switchTab('live')">• Live Highway CCTV & ANPR Detection Feeds</button></li>
+                            <li><button onclick="switchTab('analyzer')">• Video Upload Analyzer & Blocklist Check</button></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4 class="footer-heading">Policies & Charters // नीतियां</h4>
+                        <ul class="footer-links">
+                            <li><span>• Website Policies & Hyperlinking Policy</span></li>
+                            <li><span>• Privacy Policy & Citizen Data Security</span></li>
+                            <li><span>• Citizen Charter & Redressal Mechanism</span></li>
+                            <li><span>• Help, FAQ & User Manual for Citizen Services</span></li>
+                            <li><span>• Copyright & Disclaimer Notice</span></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4 class="footer-heading">Contact & Control Room // नियंत्रण कक्ष</h4>
+                        <div class="footer-contact">
+                            <div class="footer-contact-item">
+                                <i data-lucide="phone" class="icon-xs icon-amber"></i>
+                                <span>Toll Free Helpline: <strong>1800-180-2026</strong></span>
+                            </div>
+                            <div class="footer-contact-item">
+                                <i data-lucide="mail" class="icon-xs icon-amber"></i>
+                                <span>Support: <strong>helpdesk@transit-portal.org</strong></span>
+                            </div>
+                            <div class="footer-contact-item">
+                                <i data-lucide="clock" class="icon-xs icon-emerald"></i>
+                                <span class="text-muted">24x7 Real-time Surveillance Helpdesk</span>
+                            </div>
+                        </div>
+                        <div class="footer-cert-badge">
+                            <i data-lucide="check-circle-2" class="icon-xs icon-emerald"></i>
+                            STQC / W3C Level-AA Verified
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-secondary">
+                <div class="container footer-secondary-inner">
+                    <div>
+                        <p>Website Designed, Developed and Maintained by <strong>Autonomous Digital Transport Infrastructure & Urban Mobility Grid</strong>.</p>
+                        <p class="footer-copyright">All rights reserved. Contents of this portal are managed by the Integrated Traffic Surveillance Authority.</p>
+                    </div>
+                    <div class="footer-meta">
+                        <div>Portal Last Updated: <strong>29 September 2026</strong></div>
+                        <div>Today's ANPR Scans: <strong>2,418,920 Verified</strong></div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal Container -->
+    <div id="modal-overlay" class="modal-overlay" style="display:none;" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="tricolor-bar"></div>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
